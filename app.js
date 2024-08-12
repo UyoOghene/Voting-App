@@ -26,7 +26,13 @@ auth.languageCode = 'en';
 const provider = new GoogleAuthProvider();
 
 const loginContainer = document.querySelector('.login-container');
+const loginpassword = document.querySelector('#password');
+const loginRequirements = document.getElementById('login-password-requirements');
+
 const container = document.querySelector('.container');
+const nameBox = document.querySelector('#name-box');
+const imgContainer = document.querySelector("#img-cont");
+const imgBox = document.querySelector("#img-box");
 const likePics = document.querySelector('.like-pic');
 const tinubuLikeSpan = document.getElementById('like-span-tinubu');
 const picpeter = document.getElementById('picpeter');
@@ -38,12 +44,15 @@ const handleVote = (candidate) => {
     const user = auth.currentUser;
     if (!user) {
         alert("Please log in to vote.");
-        return;
+        loginContainer.style.display = 'flex';
+        container.style.display = 'none';
     }
 
     const userId = user.uid;
+
     const userVoteRef = ref(database, `votes/${userId}`);
     const candidateVoteRef = ref(database, `candidates/${candidate}`);
+
 
     get(userVoteRef).then((snapshot) => {
         if (snapshot.exists()) {
@@ -84,8 +93,11 @@ const handleVote = (candidate) => {
 // Display current likes when user logs in
  onAuthStateChanged (auth, (user) => {
     if (user) {
+        console.log(user.photoURL)
         loginContainer.style.display = 'none';
-        container.style.display = 'block';
+        container.style.display = 'flex';
+        nameBox.innerHTML = user.displayName;
+        imgContainer.setAttribute('src', user.photoURL);
 
         get(ref(database, 'candidates/tinubu')).then((snapshot) => {
             tinubuLikeSpan.textContent = snapshot.exists() ? snapshot.val() : 0;
@@ -94,8 +106,23 @@ const handleVote = (candidate) => {
         get(ref(database, 'candidates/peter')).then((snapshot) => {
             peterLikeSpan.textContent = snapshot.exists() ? snapshot.val() : 0;
         });
+    }
+    // if (userCredential) {
+    //     loginContainer.style.display = 'none';
+    //     container.style.display = 'flex';
+    //     nameBox.innerHTML = userCredential.email;
+    //     // imgContainer.setAttribute('src', user.photoURL);
 
-    } else {
+    //     get(ref(database, 'candidates/tinubu')).then((snapshot) => {
+    //         tinubuLikeSpan.textContent = snapshot.exists() ? snapshot.val() : 0;
+    //     });
+
+    //     get(ref(database, 'candidates/peter')).then((snapshot) => {
+    //         peterLikeSpan.textContent = snapshot.exists() ? snapshot.val() : 0;
+    //     });
+    // }
+    
+     else {
         document.querySelector('.login-container').style.display = 'block';
         document.querySelector('.container').style.display = 'none';
     }
@@ -107,7 +134,6 @@ document.querySelector('#googleBtn').addEventListener('click', () => {
     signInWithPopup(auth, provider)
         .then((result) => {
             console.log('Google sign-in successful:', result.user);
-            // Firebase will automatically trigger onAuthStateChanged
         })
         .catch((error) => {
             console.error('Google sign-in error:', error);
@@ -122,8 +148,11 @@ document.querySelector('#login').addEventListener('click', (e) => {
 
     signInWithEmailAndPassword(auth, username, password)
         .then((userCredential) => {
-            console.log('User signed in:', userCredential.user);
-            // Firebase will automatically trigger onAuthStateChanged
+            console.log('User signed in:', userCredential.user, userCredential.user.email);
+            nameBox.innerHTML = userCredential.user.email;
+            imgBox.style.display = 'none'
+
+
         })
         .catch((error) => {
             console.error('Sign in error', error);
@@ -155,3 +184,60 @@ document.querySelector('#logout-btn').addEventListener('click', () => {
         console.error('Sign out error', error);
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const passwordInput = document.getElementById('signUpassword');
+    
+    const passwordRequirements = document.getElementById('password-requirements');
+
+    passwordInput.addEventListener('focus', () => {
+        passwordRequirements.style.display = 'block';
+    });
+
+    passwordInput.addEventListener('blur', () => {
+        passwordRequirements.style.display = 'none';
+    });
+
+    passwordInput.addEventListener('input', () => {
+        const value = passwordInput.value;
+        const requirements = [
+            value.length >= 8,
+            /[A-Z]/.test(value),
+            /[a-z]/.test(value),
+            /[0-9]/.test(value),
+            /[^A-Za-z0-9]/.test(value)
+        ];
+        
+        const listItems = passwordRequirements.querySelectorAll('li');
+        listItems.forEach((item, index) => {
+            item.style.color = requirements[index] ? 'green' : 'red';
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    loginpassword.addEventListener('focus', () => {
+        loginRequirements.style.display = 'block';
+    });
+
+    loginpassword.addEventListener('blur', () => {
+        loginRequirements.style.display = 'none';
+    });
+
+    loginpassword.addEventListener('input', () => {
+        const value = loginpassword.value;
+        const requirements = [
+            value.length >= 8,
+            /[A-Z]/.test(value),
+            /[a-z]/.test(value),
+            /[0-9]/.test(value),
+            /[^A-Za-z0-9]/.test(value)
+        ];
+        
+        const listItems2 = loginRequirements.querySelectorAll('li');
+        listItems2.forEach((item2, index) => {
+            item2.style.color = requirements[index] ? 'green' : 'red';
+        });
+    });
+})
+
