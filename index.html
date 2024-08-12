@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="android-chrome" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="android-chrome" sizes="512x512" href="/favicon/android-chrome-512x512.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/favicon/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <!-- <link rel="manifest" href="./favicon.ico/site.webmanifest"> -->
+
+    <title>Vote-counter </title>
+</head>
+<body>
+    <div class="main-container">
+         <div class="login-container"> 
+            <h2 id="titleh2">Login</h2>
+            <form id="form">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+                <div id="login-password-requirements" class="requirements">
+                    <p>Password must contain:</p>
+                    <ul>
+                        <li>At least 8 characters</li>
+                        <li>One uppercase letter</li>
+                        <li>One lowercase letter</li>
+                        <li>One number</li>
+                        <li>One special character</li>
+                    </ul>
+                </div>
+
+                <button id="login" type="submit">Login</button>
+                <button type="button" id="googleBtn">Login with Google<i class="fa fa-google-plus" ></i></button>
+                <button id="signup-btn">Create Account</button>
+
+            </form>
+            <form id="signUp">
+                <label for="firstname">Firstname</label>
+                <input type="text" id="firstname" name="firstname">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email">
+                <label for="password">password</label>
+                <input type="password" id="signUpassword" name="password">
+                <div id="password-requirements" class="requirements">
+                    <p>Password must contain:</p>
+                    <ul>
+                        <li>At least 8 characters</li>
+                        <li>One uppercase letter</li>
+                        <li>One lowercase letter</li>
+                        <li>One number</li>
+                        <li>One special character</li>
+                    </ul>
+                </div>
+                <label for="confirmP">confirm password</label>
+                <input type="password" id="confirmpassword" name="confirmP">
+                <button id="signUpSubmit">submit</button>
+            </form>
+
+        </div>
+
+ 
+    <div class="container">
+        <div id="user-box">
+            <div id="name-box"></div>
+            <div id="img-box"></div>
+            <button id="logout-btn">Logout</button>
+
+        </div>
+
+        <!-- <div id="vote-box">
+            <div id="like-box-tinubu" class="like-box">
+                <img class="like-pic"  src="./download.jpeg" alt="thumb up">
+                <p id="like-Txt"><span id="like-span-tinubu">0</span>like</p>
+            </div>
+            <div id="like-box-peter" class="like-box">
+                <img class="like-pic" src="peter.jpeg" alt="thumb up">
+                <p id="like-Txt"><span id="like-span-peter">0</span>like</p>
+            </div>
+        </div> -->
+        <div id="vote-box">
+            <div id="like-box-tinubu" class="like-box">
+                <img class="like-pic" id="pictinubu" data-candidate="tinubu" src="./download.jpeg" alt="thumb up">
+                <p id="like-Txt"><span id="like-span-tinubu">0</span> likes</p>
+            </div>
+            <div id="like-box-peter" class="like-box">
+                <img class="like-pic" id="picpeter" data-candidate="peter" src="peter.jpeg" alt="thumb up">
+                <p id="like-Txt"><span id="like-span-peter">0</span> likes</p>
+            </div>
+        </div>
+        <div id="vote"><p id="vote-para">click on the image to vote for the best president.</p></div>
+
+    </div>
+</div>
+    <script type="module" src="./app.js"></script>
+</body>
+</html>
