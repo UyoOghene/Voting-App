@@ -34,6 +34,15 @@ const nameBox = document.querySelector('#name-box');
 const imgContainer = document.querySelector("#img-cont");
 const imgBox = document.querySelector("#img-box");
 const likePics = document.querySelector('.like-pic');
+const signupBtn = document.querySelector('#signup-btn');
+const titleh2 = document.querySelector('#titleh2');
+const signUpform = document.querySelector('#signUp');
+const firstname = document.querySelector('#firstname');
+const email = document.querySelector('#email');
+const form = document.querySelector('#form');
+const signUpSubmit = document.querySelector('#signUpSubmit');
+const confirmpassword = document.querySelector('#confirmpassword');
+const signUpassword = document.querySelector('#signUpassword');
 const tinubuLikeSpan = document.getElementById('like-span-tinubu');
 const picpeter = document.getElementById('picpeter');
 const pictinubu = document.getElementById('pictinubu');
@@ -148,16 +157,29 @@ document.querySelector('#login').addEventListener('click', (e) => {
 
     signInWithEmailAndPassword(auth, username, password)
         .then((userCredential) => {
-            console.log('User signed in:', userCredential.user, userCredential.user.email);
-            nameBox.innerHTML = userCredential.user.email;
-            imgBox.style.display = 'none'
+            if(userCredential){
+                console.log('User signed in:', userCredential.user, userCredential.user.email);
+                nameBox.innerHTML = userCredential.user.email;
+                imgBox.style.display = 'none';
+    
+            }else{
+                alert("invalid credentials, add a registered email and password" );
 
-
+            }
         })
         .catch((error) => {
             console.error('Sign in error', error);
+            alert("invalid credentials, add a registered email and passwrord" );
         });
 });
+signupBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    form.style.display = 'none';
+    signUpform.style.display = 'flex';
+    titleh2.textContent = 'Sign UP';
+});
+
 
 
 // Sign up logic
@@ -165,15 +187,21 @@ document.querySelector('#signUpSubmit').addEventListener('click', (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('signUpassword').value;
-
-    createUserWithEmailAndPassword(auth, email, password)
+    if(password !== "" && email !== ""){
+        createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
             console.log('User signed up:', user);
         })
         .catch((error) => {
             console.error('Sign up error:', error);
+            alert('This email already has an account!')
         });
+    }else{
+        alert('fill out all the fields!');
+    }
+
+   
 });
 
 // Logout logic
