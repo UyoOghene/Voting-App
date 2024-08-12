@@ -149,7 +149,6 @@ document.querySelector('#googleBtn').addEventListener('click', () => {
         });
 });
 
-// Example login logic using email/password
 document.querySelector('#login').addEventListener('click', (e) => {
     e.preventDefault();
     const username = document.getElementById('username').value;

@@ -23,6 +23,28 @@ body {
     border: 2px solid #9565f6; 
     color: #333;
 }
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 300px;
+    padding: 5px;
+    /* background-color: rgb(206, 206, 239);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px; */
+    row-gap: 5px;
+    height: 350px;
+    /* width: 250px; */
+    padding: 5px;
+    background-color: #ffffff;
+    padding: 30px;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
+    border-radius: 10px;
+    border: none;
+
+}
+
 
 h2 {
     text-align: center;
@@ -206,27 +228,6 @@ form.active {
 }
 
 
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 300px;
-    padding: 5px;
-    /* background-color: rgb(206, 206, 239);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px; */
-    row-gap: 5px;
-    height: 350px;
-    /* width: 250px; */
-    padding: 5px;
-    background-color: #ffffff;
-    padding: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    border: 2px solid #f6d365;
-
-}
 
 .login-container h2 {
     margin: 0 0 15px;
