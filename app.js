@@ -336,54 +336,6 @@ const peterLikeSpan = document.getElementById('like-span-peter');
 const voterBox = document.getElementById('voter-box');
 
 // // Function to handle user voting
-// const handleVote = (candidate) => {
-//     const user = auth.currentUser;
-//     if (!user) {
-//         alert("Please log in to vote.");
-//         loginContainer.style.display = 'flex';
-//         container.style.display = 'none';
-//         return;
-//     }
-
-//     const userId = user.uid;
-//     const userVoteRef = ref(database, `votes/${userId}`);
-//     const voterRef = ref(database, `voters/${userId}`);
-//     const candidateVoteRef = ref(database, `candidates/${candidate}`);
-
-//     get(userVoteRef).then((snapshot) => {
-//         if (snapshot.exists()) {
-//             alert("You have already voted.");
-//         } else {
-//             // Record the user's vote
-//             set(userVoteRef, { votedFor: candidate });
-//             set(voterRef, { voter: user.displayName || user.email });
-
-//             // Update the candidate's vote count
-//             get(candidateVoteRef).then((candidateSnapshot) => {
-//                 let currentVotes = candidateSnapshot.exists() ? candidateSnapshot.val() : 0;
-//                 currentVotes += 1;
-//                 set(candidateVoteRef, currentVotes);
-
-//                 // Update the UI
-//                 if (candidate === "tinubu") {
-//                     tinubuLikeSpan.textContent = currentVotes;
-//                 } else if (candidate === "peter") {
-//                     peterLikeSpan.textContent = currentVotes;
-//                 }
-//             });
-
-//             // Display voter in the voter box
-//             const voterTxt = document.createElement('p');
-//             voterBox.appendChild(voterTxt);
-//             voterTxt.setAttribute('id', 'voterTxt');
-//             voterTxt.textContent = user.displayName || user.email;
-//         }
-//     }).catch((error) => {
-//         console.error("Error handling vote:", error);
-//     });
-// };
-
-// Function to handle user voting
 const handleVote = (candidate) => {
     const user = auth.currentUser;
     if (!user) {
@@ -402,20 +354,16 @@ const handleVote = (candidate) => {
         if (snapshot.exists()) {
             alert("You have already voted.");
         } else {
-            // Get the current time
             const currentTime = new Date().toLocaleString();
 
-            // Record the user's vote along with the time
             set(userVoteRef, { votedFor: candidate, time: currentTime });
-            set(voterRef, { voter: user.displayName, time: currentTime });
+            set(voterRef, { voter: user.displayName || user.email, time: currentTime });
 
-            // Update the candidate's vote count
             get(candidateVoteRef).then((candidateSnapshot) => {
                 let currentVotes = candidateSnapshot.exists() ? candidateSnapshot.val() : 0;
                 currentVotes += 1;
                 set(candidateVoteRef, currentVotes);
 
-                // Update the UI
                 if (candidate === "tinubu") {
                     tinubuLikeSpan.textContent = currentVotes;
                 } else if (candidate === "peter") {
@@ -423,11 +371,19 @@ const handleVote = (candidate) => {
                 }
             });
 
-            // Display voter in the voter box with the time of voting
-            const voterTxt = document.createElement('p');
-            voterBox.appendChild(voterTxt);
-            voterTxt.setAttribute('id', 'voterTxt');
-            voterTxt.textContent = `${user.displayName } - Voted at: ${currentTime}`;
+            get(ref(database, 'voters')).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const voters = snapshot.val();
+                    voterBox.innerHTML = ''; // Clear the voterBox
+                    const ol = document.createElement('ol'); // Create an ordered list
+                    Object.values(voters).forEach((voter) => {
+                        const li = document.createElement('li'); // Create a list item
+                        li.textContent = `${voter.voter} - Voted at: ${voter.time}`;
+                        ol.appendChild(li);
+                    });
+                    voterBox.appendChild(ol); // Append the ordered list to the voterBox
+                }
+            });
         }
     }).catch((error) => {
         console.error("Error handling vote:", error);
@@ -452,7 +408,6 @@ onAuthStateChanged(auth, (user) => {
         nameBox.innerHTML = user.displayName;
         imgContainer.setAttribute('src', user.photoURL);
 
-        // Fetch and display likes
         get(ref(database, 'candidates/tinubu')).then((snapshot) => {
             tinubuLikeSpan.textContent = snapshot.exists() ? snapshot.val() : 0;
         });
@@ -461,16 +416,17 @@ onAuthStateChanged(auth, (user) => {
             peterLikeSpan.textContent = snapshot.exists() ? snapshot.val() : 0;
         });
 
-        // Fetch and display voters
         get(ref(database, 'voters')).then((snapshot) => {
             if (snapshot.exists()) {
                 const voters = snapshot.val();
-                voterBox.innerHTML = ''; // Clear the voterBox
+                voterBox.innerHTML = ''; 
+                const ol = document.createElement('ol');
                 Object.values(voters).forEach((voter) => {
-                    const voterTxt = document.createElement('p');
-                    voterTxt.textContent = voter.voter + voter.time;
-                    voterBox.appendChild(voterTxt);
+                    const li = document.createElement('li'); 
+                    li.textContent = `${voter.voter} - Voted at: ${voter.time}`;
+                    ol.appendChild(li);
                 });
+                voterBox.appendChild(ol); 
             }
         });
     } else {
